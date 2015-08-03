@@ -1,10 +1,15 @@
 var AddPin = React.createClass({
+
 	addPins: function () {
 		var url = "/pins"
 		$.ajax({
 			url: url,
 			type: 'POST',
 			dataType: 'JSON',
+			data: {id: this.props.user},
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
+			},
 			error: function () {
 				console.log('error on adding pins');
 			},

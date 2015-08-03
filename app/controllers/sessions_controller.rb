@@ -10,7 +10,8 @@ class SessionsController < ApplicationController
 
 	def logout
 		session.clear
-		render json: 'logout'
+		message = 'logged out'
+		render json: {x:message}
 	end
 
 	def check

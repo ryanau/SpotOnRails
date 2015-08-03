@@ -1,20 +1,34 @@
 class PinsController < ApplicationController
 	def index
-		if params["active"] == "true"
-			render json: Pin.where(active: true)
-		elsif params["active"] == "false"
-			render json: Pin.where(active: false)
+		if params["query"] == "all_active_pins"
+			render json: Pin.where(active: true, accepted_user_id: 0).where.not(user_id: params["user_id"])
+		elsif params["query"] == 'your_active_pin'
+			user = User.find(params["user_id"])
+			pin = user.pins.where(active: true).last
+			render json: pin
+		elsif params["query"] == 'your_accepted_pin'
+			pin = Pin.where(active: true, accepted_user_id: params["user_id"]).order(updated_at: :DESC).first
+			render json: pin
 		end
 	end
 
 	def create
-		pin = Pin.create(active: true)
+		user = User.find(params["id"])
+		pin = user.pins.create(active: true)
 		render json: pin
 	end
 
-	def destroy
-		pin = Pin.find(params["id"].to_i)
-		pin.destroy
-		render json: pin
+	def update
+		if params["query"] == "accept"
+			pin = Pin.find(params["pin_id"]).update_attributes(accepted: true, accepted_user_id: params["user_id"])
+			render json: pin
+		end
 	end
+
+	# def destroy
+	# 	pin = Pin.find(params["id"].to_i)
+	# 	pin.destroy
+	# 	render json: pin
+	# end
+
 end

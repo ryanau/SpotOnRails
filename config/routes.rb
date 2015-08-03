@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   scope constraints: ACCEPTS_JSON do
     resources :pins
-    resources :users
+    resources :users 
     
     post '/login', to: 'sessions#login'
 
@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     get '/logout', to: 'sessions#logout'
 
     get '/check', to: 'sessions#check'
+
   end
 
   get '*path', to: 'app#show'

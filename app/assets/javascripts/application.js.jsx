@@ -12,6 +12,7 @@ var App = React.createClass({
 			showPinsContainer: false,
 			showAuthContainer: true,
 			currentUser: 0,
+			showLogOut: false,
 		}
 	},
 
@@ -39,12 +40,15 @@ var App = React.createClass({
 			this.setState({
 				showPinsContainer: true,
 				showAuthContainer: false,
+				showLogOut: true,
 			})
 		} else if (signal === "unauthorized") {
+			console.log('unauthorized!')
 			this.setState({
 				showPinsContainer: false,
 				showAuthContainer: true,
 				currentUser: 0,
+				showLogOut: false,
 			})
 		};
 	},
@@ -60,12 +64,12 @@ var App = React.createClass({
 	render: function() {
 		return (
 			<div>
+				{ this.state.showLogOut ? <Logout status={this.receiveSignal} /> : null }
 				{ this.state.showAuthContainer ? <AuthContainer status={this.receiveSignal} id={this.updateUser}/> : null }
-				{ this.state.showPinsContainer ? <PinsContainer status={this.receiveSignal}/> : null }
+				{ this.state.showPinsContainer ? <PinsContainer status={this.receiveSignal} user={this.state.currentUser}/> : null }
 			</div>
 		);
 	},
 });
-
 
 React.render(<App />, document.getElementById('app'));

@@ -7,9 +7,10 @@ var ShowActivePins = React.createClass({
 	},
 
 	componentDidMount: function () {
-		this.interval = setInterval(function() {
+		var request = function() {
 			this.getActivePins();
-		}.bind(this), 1000)
+		}.bind(this);
+		setInterval(request, 1000);
 	},
 
 	componentWillUnmount: function() {
@@ -18,7 +19,7 @@ var ShowActivePins = React.createClass({
 
 	getActivePins: function () {
 		var url = "/pins";
-		var params = {active: true};
+		var params = {query: "all_active_pins", user_id: this.props.user};
 		$.ajax ({
 			url: url,
 			type: 'GET',
@@ -28,7 +29,7 @@ var ShowActivePins = React.createClass({
 				console.log('error on getting active pins');
 			},
 			success: function (data) {
-				console.log('fetch')
+				console.log(sessionStorage.getItem('key'));
 				if (this.isMounted()) {
 					this.setState({
 						activePins: data
@@ -38,22 +39,23 @@ var ShowActivePins = React.createClass({
 		});
 	},
 
-	// handleRemovePin: function (id) {
-	// 	var url = '/pins/' + id;
-	// 	var params = {id: id};
-	// 	$.ajax ({
-	// 		url: url,
-	// 		type: 'DELETE',
-	// 		dataType: 'JSON',
-	// 		data: params,
-	// 		error: function() {
-	// 			console.log('error on deleing active pins');
-	// 		},
-	// 		success: function (data) {
-	// 			console.log('success in deleting active pin')
-	// 		}.bind(this)
-	// 	});
-	// },
+	handleRequestPin: function (id) {
+		var url = '/pins/' + id;
+		var params = {query: "accept", pin_id: id, user_id: this.props.user};
+		$.ajax ({
+			url: url,
+			type: 'PUT',
+			dataType: 'JSON',
+			data: params,
+			error: function() {
+				console.log('error on updating pin to be accepted');
+			},
+			success: function (data) {
+				this.props.status("pinRequested");
+				console.log('success in updating pin to be accepted')
+			}.bind(this)
+		});
+	},
 
 	render: function() {
 		var styles = {
@@ -74,7 +76,7 @@ var ShowActivePins = React.createClass({
 		    cursor: "pointer",
 		    color: "rgb(222, 79, 79)"
 		  },
-		  todoItem: {
+		  item: {
 		    paddingLeft: 20,
 		    fontSize: 17
 		  }
@@ -83,8 +85,9 @@ var ShowActivePins = React.createClass({
 		var pins = this.state.activePins.map(function (pin, index) {
 			return (
 				<li key={pin.id} className="list-group-item" style={styles.listGroup}>
-					<span style={styles.todoItem}>
-					ID: {pin.id} | Active: {pin.active}
+					<span style={styles.item}>
+					ID: {pin.id} | Active: {pin.active} | 
+					<button onClick={this.handleRequestPin.bind(this, pin.id)}>Request Pin</button>
 					</span>
 				</li>
 			)

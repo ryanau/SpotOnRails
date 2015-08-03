@@ -6,6 +6,7 @@ var Login = React.createClass({
 			type: 'POST',
 			dataType: 'JSON',
 			data: attributes,
+			headers: {'X-CSRF-Token': '<%= form_authenticity_token.to_s %>'},
 			error: function () {
 				console.log('error on logging in user');
 			},

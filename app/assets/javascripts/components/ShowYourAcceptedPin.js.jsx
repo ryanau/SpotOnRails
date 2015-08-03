@@ -1,4 +1,4 @@
-var ShowYourPin = React.createClass({
+var ShowYourAcceptedPin = React.createClass({
 	getInitialState: function () {
 		return {
 			yourPins: [],
@@ -17,17 +17,17 @@ var ShowYourPin = React.createClass({
 
 	getYourPin: function () {
 		var url = "/pins";
-		var params = {query: 'your_active_pin', user_id: this.props.user};
+		var params = {query: 'your_accepted_pin', user_id: this.props.user};
 		$.ajax ({
 			url: url,
 			type: 'GET',
 			dataType: 'JSON',
 			data: params,
 			error: function() {
-				console.log('error on getting your pins');
+				console.log('error on getting your accepted pin');
 			},
 			success: function (data) {
-				console.log('getting your active pin')
+				console.log('getting your accepted pin')
 				if (this.isMounted()) {
 					console.log(data)
 					this.setState({
@@ -57,14 +57,15 @@ var ShowYourPin = React.createClass({
 			return (
 				<li key={pin.id} className="list-group-item" style={styles.listGroup}>
 					<span style={styles.item}>
-					ID: {pin.id} | Created by: You
+					ID: {pin.id} | Created By: {pin.user_id} |
+					<button>Cancel Request</button>
 					</span>
 				</li>
 			)
 		}.bind(this));
 		return(
 			<div>
-				<h1>Pin You Dropped</h1>
+				<h1>Pin You Requested</h1>
 				<ul style={styles.uList}>
 					{pins}
 				</ul>

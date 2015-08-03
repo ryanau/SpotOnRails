@@ -11,7 +11,8 @@ var Login = React.createClass({
 			},
 			success: function (data) {
 				console.log('success in logging in user');
-				console.log(data);
+				// sessionStorage.setItem('key', 'value');
+				// console.log(sessionStorage.getItem('key'));
 				this.props.id(data.id);
 				this.props.status("authorized");
 			}.bind(this),

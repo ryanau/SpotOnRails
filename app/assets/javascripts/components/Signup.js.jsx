@@ -14,7 +14,7 @@ var Signup = React.createClass({
 			},
 			success: function (data) {
 				console.log('success in registering user');
-				document.cookie='data=' + data.id
+				console.log(data);
 				this.props.id(data.id);
 				this.props.status("authorized");
 			}.bind(this),
