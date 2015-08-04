@@ -21,15 +21,21 @@ class SessionsController < ApplicationController
 		render json: session
 	end
 
-	def accepted
-		status = User.find(session[:user_id]).accept
-		session[:user_accept] = status
+	def accepted_pin
+		status = User.find(session[:user_id]).accepted_pin
+		session[:user_accepted_pin] = status
 		render json: status
 	end
 
-	def engaged
-		status = User.find(session[:user_id]).engage
-		session[:user_engaged] = status
+	def dropped_pin
+		status = User.find(session[:user_id]).dropped_pin
+		session[:user_dropped_pin] = status
+		render json: status
+	end	
+
+	def dropped_pin_accepted
+		status = User.find(session[:user_id]).dropped_pin_accepted
+		session[:user_dropped_pin_accepted] = status
 		render json: status
 	end
 

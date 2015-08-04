@@ -2,8 +2,9 @@ var PinsContainer = React.createClass({
 	getInitialState: function () {
 		return {
 			session: App.session.get(),
-			accepted: App.pins.userAcceptedStatus(),
-			engaged: App.pins.userEngagedStatus(),
+			accepted_pin: App.pins.userAcceptedPinStatus(),
+			dropped_pin: App.pins.userDroppedPinStatus(),
+			dropped_pin_accepted: App.pins.userDroppedPinAcceptedStatus(),
 		}
 	},
 
@@ -13,33 +14,43 @@ var PinsContainer = React.createClass({
 		});
 	},
 
-	reloadAccepted: function () {
-		console.log('reloading accepted')
-		App.pins.userAcceptedStatus().done(function(accepted){
-			console.log('setting state accepted')
-			this.setState({accepted: accepted});
+	reloadAcceptedPin: function () {
+		App.pins.userAcceptedPinStatus().done(function(accepted_pin){
+			this.setState({accepted_pin: accepted_pin});
 		}.bind(this));
 	},
 
-	reloadEngaged: function () {
-		App.pins.userEngagedStatus().done(function(engaged){
-			this.setState({engaged: engaged});
+	reloadDroppedPin: function () {
+		App.pins.userDroppedPinStatus().done(function(dropped_pin){
+			this.setState({dropped_pin: dropped_pin});
+		}.bind(this));
+	},
+
+	reloadDroppedPinAccepted: function () {
+		App.pins.userDroppedPinAcceptedStatus().done(function(dropped_pin_accepted){
+			this.setState({dropped_pin_accepted: dropped_pin_accepted});
 		}.bind(this));
 	},
 
 	componentDidMount: function () {
-		App.pins.on('engaged_changed', this.reloadEngaged);
-		App.pins.on('accepted_changed', this.reloadAccepted);
+		App.pins.on('dropped_pin_accepted_changed', this.reloadDroppedPinAccepted);
+		App.pins.on('dropped_pin_changed', this.reloadDroppedPin);
+		App.pins.on('accepted_pin_changed', this.reloadAcceptedPin);
 		App.auth.on('logged_in', this.reloadSession);
 		App.session.on('session_loaded', this.setSession);
 		App.pins.load()
+		this.interval = setInterval(function() {
+			App.pins.load();
+		}.bind(this), 1000)
 	},
 
 	componentWillUnmount: function () {
-		App.pins.off('engaged_changed', this.reloadEngaged);
-		App.pins.off('accepted_changed', this.reloadAccepted);
+		App.pins.off('dropped_pin_accepted_changed', this.reloadDroppedPinAccepted);
+		App.pins.off('accepted_pin_changed', this.reloadAcceptedPin);
+		App.pins.off('accepted_pin_changed', this.reloadAcceptedPin);
 		App.auth.off('logged_in', this.reloadSession);
 		App.session.off('session_loaded', this.setSession);
+		clearInterval(this.interval);
 	},
 
 	render: function () {
@@ -49,7 +60,7 @@ var PinsContainer = React.createClass({
 	},
 
 	renderContent: function(){
-		if (this.state.engaged ===  false) {
+		if (this.state.dropped_pin ===  false && this.state.accepted_pin === false && this.state.dropped_pin_accepted === false) {
 			return (
 				<div>
 					<AddPin/>
@@ -57,14 +68,19 @@ var PinsContainer = React.createClass({
 				</div>
 			);
 		}
-		if (this.state.engaged === true) {
+		if (this.state.dropped_pin_accepted === true) {
+			return (
+					<ShowYourDroppedAcceptedPin />
+			);		
+		}
+		if (this.state.dropped_pin === true) {
 			return (
 					<ShowYourPin/>
 			);
 		}
-		if (this.state.accepted === true) {
+		if (this.state.accepted_pin === true) {
 			return (
-					<ShowYourAcceptedPin/>
+					<ShowYourRequestedPin/>
 			);
 		}
 		return (

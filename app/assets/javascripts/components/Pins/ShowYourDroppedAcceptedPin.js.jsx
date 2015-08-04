@@ -1,14 +1,13 @@
-
-var ShowActivePins = React.createClass({
+var ShowYourDroppedAcceptedPin = React.createClass({
 	getInitialState: function () {
 		return {
-			activePins: [],
+			yourPins: [],
 		};
 	},
 
 	componentDidMount: function () {
 		this.interval = setInterval(function() {
-			this.getActivePins();
+			this.getYourPin();
 		}.bind(this), 1000)
 	},
 
@@ -16,32 +15,32 @@ var ShowActivePins = React.createClass({
 		clearInterval(this.interval);
 	},
 
-	getActivePins: function () {
+	getYourPin: function () {
 		var url = "/pins";
-		var params = {query: "all_active_pins"};
+		var params = {query: 'your_dropped_pin'};
 		$.ajax ({
 			url: url,
 			type: 'GET',
 			dataType: 'JSON',
 			data: params,
 			error: function() {
-				console.log('error on getting active pins');
+				console.log('error on getting your pins');
 			},
 			success: function (data) {
 				if (this.isMounted()) {
 					this.setState({
-						activePins: data
+						yourPins: [data],
 					});
 				}
 			}.bind(this)
 		});
 	},
 
-	handleRequestPin: function (id) {
-		App.pins.requestPin(id);
+	handleRemovePin: function (pin_id) {
+		App.pins.removePin(pin_id);
 	},
 
-	render: function() {
+	render: function () {
 		var styles = {
 		  uList: {
 		    paddingLeft: 0,
@@ -51,46 +50,29 @@ var ShowActivePins = React.createClass({
 		    margin: '5px 0',
 		    borderRadius: 5
 		  },
-		  removeItem: {
-		    fontSize: 20,
-		    float: "left",
-		    position: "absolute",
-		    top: 12,
-		    left: 6,
-		    cursor: "pointer",
-		    color: "rgb(222, 79, 79)"
-		  },
 		  item: {
 		    paddingLeft: 20,
 		    fontSize: 17
 		  }
 		};
-
-		var pins = this.state.activePins.map(function (pin, index) {
+		var pins = this.state.yourPins.map(function (pin, index) {
 			return (
 				<li key={pin.id} className="list-group-item" style={styles.listGroup}>
 					<span style={styles.item}>
-					ID: {pin.id} | Active: {pin.active} | 
-					<button onClick={this.handleRequestPin.bind(this, pin.id)}>Request Pin</button>
+					ID: {pin.id} | Accepted by: {pin.accepted_user_id} |
+					<button onClick={this.handleRemovePin.bind(this, pin.id)}>Remove Pin</button>
 					</span>
 				</li>
 			)
 		}.bind(this));
 		return(
 			<div>
-				<h1>Active Pins</h1>
+				<h1>Pin You Dropped</h1>
 				<ul style={styles.uList}>
 					{pins}
 				</ul>
 			</div>
 		);
 	},
+
 });
-
-
-
-
-
-
-
-

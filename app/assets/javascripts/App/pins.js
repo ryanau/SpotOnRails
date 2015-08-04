@@ -1,22 +1,24 @@
 !function(){
 
-	var engaged = null;
 	var pins = App.pins = {};
 
 	Object.assign(pins, EventEmitter.prototype);
 
 	pins.on('user_action', function(){
-		pins.emit('engaged_changed');
-		pins.emit('accepted_changed');
+		pins.emit('dropped_pin_changed');
+		pins.emit('accepted_pin_changed');
 	});
 
-	pins.userAcceptedStatus = function () {
-		console.log('getting accepted')
-		return App.helper.getRequest('/accepted');
+	pins.userAcceptedPinStatus = function () {
+		return App.helper.getRequest('/accepted_pin');
 	};	
 
-	pins.userEngagedStatus = function () {
-		return App.helper.getRequest('/engaged');
+	pins.userDroppedPinStatus = function () {
+		return App.helper.getRequest('/dropped_pin');
+	};	
+
+	pins.userDroppedPinAcceptedStatus = function () {
+		return App.helper.getRequest('/dropped_pin_accepted');
 	};
 
 	pins.addPin = function (id) {
@@ -30,14 +32,19 @@
 	};
 
 	pins.requestPin = function (id) {
-		App.helper.putRequest('/pins/' + id, {query: "accept", pin_id: id}).then(
+		App.helper.putRequest('/pins/' + id, {query: "request", pin_id: id}).then(
 		pins.emit('user_action'));
-		debugger
-		console.log('pin requested');
 	};
 
+	pins.cancelRequest = function (id) {
+		alert('canceling')
+		App.helper.putRequest('/pins/' + id, {query: "cancel_request", pin_id: id}).then(
+		pins.emit('user_action'));
+	}
+
 	pins.load = function () {
-		pins.emit('engaged_changed');
-		pins.emit('accepted_changed');
+		pins.emit('dropped_pin_changed');
+		pins.emit('accepted_pin_changed');
+		pins.emit('dropped_pin_accepted_changed');
 	};
 }();

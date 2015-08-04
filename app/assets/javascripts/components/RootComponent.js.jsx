@@ -6,14 +6,12 @@ RootComponent = React.createClass({
 	},
 
 	setSession: function () {
-		console.log('setting session')
 		this.setState({
 			session: App.session.get(),
 		});
 	},
 
 	reloadSession: function () {
-		console.log('reloading session')
 		App.session.reload()
 	},
 
