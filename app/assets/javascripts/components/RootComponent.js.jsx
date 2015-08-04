@@ -1,6 +1,4 @@
-
 RootComponent = React.createClass({
-
 	getInitialState: function () {
 		return {
 			session: App.session.get(),
@@ -13,7 +11,14 @@ RootComponent = React.createClass({
 		});
 	},
 
+	reloadSession: function () {
+		this.setState({
+			session: App.session.load(),
+		});
+	},
+
 	componentDidMount: function () {
+		App.machine.on('logged_in', this.reloadSession);
 		App.session.on('session_loaded', this.setSession);
 	},
 
@@ -24,14 +29,19 @@ RootComponent = React.createClass({
 	render: function () {
 		if (this.state.session === null) {
 			return (
-				<div>
-					<h4>Loading...</h4>
-				</div>
+			<h4>Loading...</h4>
 			);
 		} else if (this.state.session.user_id) {
-			return <div> welcome back user {this.state.session.user_id} </div>
+			return (
+				<div>
+					<Logout/>
+					<PinsContainer/>
+				</div>
+			);
 		} else {
-			return <div> please log in </div>
+			return  (
+				<AuthContainer />
+			)
 		};
 	},
 });

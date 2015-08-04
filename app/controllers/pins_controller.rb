@@ -2,8 +2,8 @@ class PinsController < ApplicationController
 	def index
 		if params["query"] == "all_active_pins"
 			render json: Pin.where(active: true, accepted_user_id: 0).where.not(user_id: params["user_id"])
-		elsif params["query"] == 'your_active_pin'
-			user = User.find(params["user_id"])
+		elsif params["query"] == 'your_dropped_pin'
+			user = User.find(session[:user_id])
 			pin = user.pins.where(active: true).last
 			render json: pin
 		elsif params["query"] == 'your_accepted_pin'
@@ -15,6 +15,7 @@ class PinsController < ApplicationController
 	def create
 		user = User.find(params["id"])
 		pin = user.pins.create(active: true)
+		user.update_attributes(engage: true)
 		render json: pin
 	end
 
@@ -25,10 +26,10 @@ class PinsController < ApplicationController
 		end
 	end
 
-	# def destroy
-	# 	pin = Pin.find(params["id"].to_i)
-	# 	pin.destroy
-	# 	render json: pin
-	# end
+	def destroy
+		pin = Pin.destroy(params["id"].to_i)
+		user = User.find(session[:user_id]).update_attributes(engage: false)
+		render json: pin
+	end
 
 end

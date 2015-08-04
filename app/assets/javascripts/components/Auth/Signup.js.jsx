@@ -1,26 +1,4 @@
 var Signup = React.createClass({
-	registerUser: function (attributes) {
-		var url = "/users"
-		$.ajax({
-			url: url,
-			type: 'POST',
-			dataType: 'JSON',
-			data: attributes,
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-			},
-			error: function () {
-				console.log('error on registering user');
-			},
-			success: function (data) {
-				console.log('success in registering user');
-				document.cookie='data=' + data.id
-				this.props.id(data.id);
-				this.props.status("authorized");
-			}.bind(this),
-		});
-	},
-
 	handleSubmit: function(e) {
 	  e.preventDefault();
 	  var fn = this.refs.fn.getDOMNode().value;
@@ -39,7 +17,7 @@ var Signup = React.createClass({
 	  	carcolor: carcolor,
 	  }
 
-	  this.registerUser(attributes)
+	  App.machine.signup(attributes);
 	},
 
 	render: function () {

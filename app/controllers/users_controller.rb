@@ -11,6 +11,9 @@ class UsersController < ApplicationController
 		user.password = params["password"]
 		if user.save
 			session[:user_id] = user.id
+			session[:user_email] = user.email
+			session[:user_first_name] = user.first_name
+			session[:user_last_name] = user.last_name
 			render json: user
 		end
 	end
