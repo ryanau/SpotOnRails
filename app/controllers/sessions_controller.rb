@@ -14,10 +14,8 @@ class SessionsController < ApplicationController
 		render json: {x:message}
 	end
 
-	def check
-		if session[:user_id]
-			render json: session[:user_id]
-		end
+	def show
+		render json: session
 	end
 
 end

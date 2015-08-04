@@ -1,8 +1,6 @@
-
-
 !function(){
 	var data = null;
-	session = {};
+	var session = App.session = {};
 
 	Object.assign(session, EventEmitter.prototype);
 

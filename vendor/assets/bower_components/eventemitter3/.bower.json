@@ -37,7 +37,6 @@
     "commit": "91f571f40c918d71220747791c05ec33f3402a56"
   },
   "_source": "git://github.com/primus/eventemitter3.git",
-  "_target": "~1.1.1",
-  "_originalSource": "eventemitter3",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "eventemitter3"
 }
