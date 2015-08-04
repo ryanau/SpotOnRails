@@ -6,24 +6,25 @@ RootComponent = React.createClass({
 	},
 
 	setSession: function () {
+		console.log('setting session')
 		this.setState({
 			session: App.session.get(),
 		});
 	},
 
 	reloadSession: function () {
-		this.setState({
-			session: App.session.load(),
-		});
+		console.log('reloading session')
+		App.session.reload()
 	},
 
 	componentDidMount: function () {
-		App.machine.on('logged_in', this.reloadSession);
+		App.auth.on('logged_in', this.reloadSession);
 		App.session.on('session_loaded', this.setSession);
 	},
 
 	componentWillUnmount: function () {
-		App.session.off('session_loaded', this.setSession);
+		// App.auth.off('logged_in', this.reloadSession);
+		// App.session.off('session_loaded', this.setSession);
 	},
 
 	render: function () {

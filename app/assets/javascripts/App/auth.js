@@ -1,29 +1,17 @@
 !function(){
 	var data = null;
-	var machine = App.machine = {};
+	var auth = App.auth = {};
 
-	Object.assign(machine, EventEmitter.prototype);
+	Object.assign(auth, EventEmitter.prototype);
 
-	machine.login = function (attributes) {
-		var url = "/login"
-		return $.ajax({
-			url: url,
-			type: 'POST',
-			dataType: 'JSON',
-			data: attributes,
-			headers: {'X-CSRF-Token': '<%= form_authenticity_token.to_s %>'},
-			error: function () {
-				console.log('error on logging in user');
-			},
-			success: function (data) {
-				console.log('success in logging in user');
-				console.log(data);
-				machine.emit('logged_in', data)
-			}.bind(this),
+	auth.login = function (attributes) {
+		App.helper.postRequest('/login', attributes).then(function(responseData) {
+			console.log('logged+in')
+			App.session.reload()
 		});
 	};
 
-	machine.signup = function (attributes) {
+	auth.signup = function (attributes) {
 		var url = "/users"
 		$.ajax({
 			url: url,
@@ -37,14 +25,12 @@
 				console.log('error on registering user');
 			},
 			success: function (data) {
-				console.log('success in registering user');
-				console.log(data);
-				machine.emit('logged_in', data)
+				App.session.reload()
 			}.bind(this),
 		});
 	};
 
-	machine.logout = function () {
+	auth.logout = function () {
 		var url = "/logout"
 		$.ajax({
 			url: url,
@@ -55,7 +41,7 @@
 			},
 			success: function (data) {
 				console.log('logged out');
-				machine.emit('logged_in', data);
+				App.session.reload()
 			}.bind(this),
 			error: function (data) {
 				console.log('error on logging user out');

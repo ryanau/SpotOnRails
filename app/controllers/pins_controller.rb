@@ -1,7 +1,7 @@
 class PinsController < ApplicationController
 	def index
 		if params["query"] == "all_active_pins"
-			render json: Pin.where(active: true, accepted_user_id: 0).where.not(user_id: params["user_id"])
+			render json: Pin.where(active: true, accepted_user_id: 0).where.not(user_id: session[:user_id])
 		elsif params["query"] == 'your_dropped_pin'
 			user = User.find(session[:user_id])
 			pin = user.pins.where(active: true).last
@@ -21,7 +21,7 @@ class PinsController < ApplicationController
 
 	def update
 		if params["query"] == "accept"
-			pin = Pin.find(params["pin_id"]).update_attributes(accepted: true, accepted_user_id: params["user_id"])
+			pin = Pin.find(params["pin_id"]).update_attributes(accepted: true, accepted_user_id: session[:user_id])
 			render json: pin
 		end
 	end

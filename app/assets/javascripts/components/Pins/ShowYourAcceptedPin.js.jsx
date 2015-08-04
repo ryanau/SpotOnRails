@@ -5,38 +5,6 @@ var ShowYourAcceptedPin = React.createClass({
 		};
 	},
 
-	componentDidMount: function () {
-		this.interval = setInterval(function() {
-			this.getYourPin();
-		}.bind(this), 1000)
-	},
-
-	componentWillUnmount: function() {
-		clearInterval(this.interval);
-	},
-
-	getYourPin: function () {
-		var url = "/pins";
-		var params = {query: 'your_accepted_pin', user_id: this.props.user};
-		$.ajax ({
-			url: url,
-			type: 'GET',
-			dataType: 'JSON',
-			data: params,
-			error: function() {
-				console.log('error on getting your accepted pin');
-			},
-			success: function (data) {
-				console.log('getting your accepted pin')
-				if (this.isMounted()) {
-					console.log(data)
-					this.setState({
-						yourPins: [data],
-					});
-				}
-			}.bind(this)
-		});
-	},
 
 	render: function () {
 		var styles = {

@@ -1,6 +1,6 @@
 var Logout = React.createClass({
 	handleClick: function () {
-		App.machine.logout();
+		App.auth.logout();
 	},
 
 	render: function () {

@@ -17,7 +17,7 @@ var Signup = React.createClass({
 	  	carcolor: carcolor,
 	  }
 
-	  App.machine.signup(attributes);
+	  App.auth.signup(attributes);
 	},
 
 	render: function () {

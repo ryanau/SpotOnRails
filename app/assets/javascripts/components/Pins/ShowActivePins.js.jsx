@@ -7,10 +7,9 @@ var ShowActivePins = React.createClass({
 	},
 
 	componentDidMount: function () {
-		var request = function() {
+		this.interval = setInterval(function() {
 			this.getActivePins();
-		}.bind(this);
-		setInterval(request, 1000);
+		}.bind(this), 1000)
 	},
 
 	componentWillUnmount: function() {
@@ -29,7 +28,7 @@ var ShowActivePins = React.createClass({
 				console.log('error on getting active pins');
 			},
 			success: function (data) {
-				console.log(sessionStorage.getItem('key'));
+				console.log('getting pins')
 				if (this.isMounted()) {
 					this.setState({
 						activePins: data
@@ -40,21 +39,7 @@ var ShowActivePins = React.createClass({
 	},
 
 	handleRequestPin: function (id) {
-		var url = '/pins/' + id;
-		var params = {query: "accept", pin_id: id, user_id: this.props.user};
-		$.ajax ({
-			url: url,
-			type: 'PUT',
-			dataType: 'JSON',
-			data: params,
-			error: function() {
-				console.log('error on updating pin to be accepted');
-			},
-			success: function (data) {
-				this.props.status("pinRequested");
-				console.log('success in updating pin to be accepted')
-			}.bind(this)
-		});
+		App.pins.requestPin(id);
 	},
 
 	render: function() {

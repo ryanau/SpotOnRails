@@ -13,61 +13,63 @@ var PinsContainer = React.createClass({
 		});
 	},
 
-	setAccepted: function () {
-		this.setState({
-			accepted: true,
-		})
+	reloadAccepted: function () {
+		console.log('reloading accepted')
+		App.pins.userAcceptedStatus().done(function(accepted){
+			console.log('setting state accepted')
+			this.setState({accepted: accepted});
+		}.bind(this));
 	},
 
 	reloadEngaged: function () {
-		console.log('engage reload')
-		this.setState({
-			engaged: App.pins.userEngagedStatus(),
-		});
+		App.pins.userEngagedStatus().done(function(engaged){
+			this.setState({engaged: engaged});
+		}.bind(this));
 	},
 
 	componentDidMount: function () {
-		console.log('remounting')
-		console.log(this.state.engaged)
-		this.reloadEngaged
-		App.pins.on('user_added_pin', this.reloadEngaged);
-		App.pins.on('user_deleted_pin', this.reloadEngaged);
-		App.machine.on('logged_in', this.reloadSession);
+		App.pins.on('engaged_changed', this.reloadEngaged);
+		App.pins.on('accepted_changed', this.reloadAccepted);
+		App.auth.on('logged_in', this.reloadSession);
 		App.session.on('session_loaded', this.setSession);
+		App.pins.load()
 	},
 
 	componentWillUnmount: function () {
+		App.pins.off('engaged_changed', this.reloadEngaged);
+		App.pins.off('accepted_changed', this.reloadAccepted);
+		App.auth.off('logged_in', this.reloadSession);
 		App.session.off('session_loaded', this.setSession);
 	},
 
 	render: function () {
-		console.log('********')
-		console.log(this.state.engaged)
-		if (this.state.engaged === null) {
-			return (
-				<h4>Loading</h4>
-			);
-		} else if (this.state.engaged) {
+		return (
+			<div className="PinsContainer">{this.renderContent()}</div>
+		)
+	},
+
+	renderContent: function(){
+		if (this.state.engaged ===  false) {
 			return (
 				<div>
+					<AddPin/>
+					<ShowActivePins/>
+				</div>
+			);
+		}
+		if (this.state.engaged === true) {
+			return (
 					<ShowYourPin/>
-				</div>
 			);
-		} else if (!this.state.accepted) {
+		}
+		if (this.state.accepted === true) {
 			return (
-				<div>
-					<AddPin/>
-					<ShowActivePins/>
-				</div>
+					<ShowYourAcceptedPin/>
 			);
-		} else if (!this.state.engaged) {
-			return (
-				<div>
-					<AddPin/>
-					<ShowActivePins/>
-				</div>
-			);
-		};
+		}
+		return (
+			<h4>Loading...</h4>
+		);
 	},
 
 });
