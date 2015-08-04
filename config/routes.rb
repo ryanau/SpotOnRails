@@ -13,8 +13,7 @@ Rails.application.routes.draw do
 
     get '/logout', to: 'sessions#logout'
 
-    get '/check', to: 'sessions#check'
-
+    get '/session', to: 'sessions#check'
   end
 
   get '*path', to: 'app#show'
