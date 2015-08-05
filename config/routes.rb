@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   }
 
   scope constraints: ACCEPTS_JSON do
-    resources :pins
-    resources :users 
+    resources :pins, only: [:index, :create, :update, :destroy]
+    resources :users, only: [:create]
     
     post '/login', to: 'sessions#login'
 

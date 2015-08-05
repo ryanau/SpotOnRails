@@ -21,25 +21,33 @@ RootComponent = React.createClass({
 	},
 
 	componentWillUnmount: function () {
-		// App.auth.off('logged_in', this.reloadSession);
-		// App.session.off('session_loaded', this.setSession);
+		App.auth.off('logged_in', this.reloadSession);
+		App.session.off('session_loaded', this.setSession);
 	},
 
 	render: function () {
 		if (this.state.session === null) {
 			return (
-			<h4>Loading...</h4>
+				<div>
+					<h2>Spot On</h2>
+					<h4>Loading...</h4>
+				</div>
 			);
 		} else if (this.state.session.user_id) {
 			return (
 				<div>
+					<h2>Spot On</h2>
+					<h4>Welcome back {this.state.session.user_first_name}</h4>
 					<Logout/>
 					<PinsContainer/>
 				</div>
 			);
 		} else {
 			return  (
-				<AuthContainer />
+				<div>
+					<h2>Spot On</h2>
+					<AuthContainer />
+				</div>
 			)
 		};
 	},
