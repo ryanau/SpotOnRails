@@ -1,13 +1,13 @@
-var ShowYourAcceptedPin = React.createClass({
+var ShowYourRequestedPin = React.createClass({
 	getInitialState: function () {
 		return {
-			yourPins: [],
+			yourRequestedPin: [],
 		};
 	},
 
 	componentDidMount: function () {
 		this.interval = setInterval(function() {
-			this.getYourPin();
+			this.getYourRequestedPin();
 		}.bind(this), 1000)
 	},
 
@@ -15,27 +15,29 @@ var ShowYourAcceptedPin = React.createClass({
 		clearInterval(this.interval);
 	},
 
-	getYourPin: function () {
+	getYourRequestedPin: function () {
 		var url = "/pins";
-		var params = {query: 'your_accepted_pin', user_id: this.props.user};
+		var params = {query: "your_requested_pin"};
 		$.ajax ({
 			url: url,
 			type: 'GET',
 			dataType: 'JSON',
 			data: params,
 			error: function() {
-				console.log('error on getting your accepted pin');
+				console.log('error on getting your accepted pins');
 			},
 			success: function (data) {
-				console.log('getting your accepted pin')
 				if (this.isMounted()) {
-					console.log(data)
 					this.setState({
-						yourPins: [data],
+						yourRequestedPin: [data]
 					});
 				}
 			}.bind(this)
 		});
+	},
+
+	handleCancelRequest: function (id) {
+		App.pins.cancelRequest(id);
 	},
 
 	render: function () {
@@ -53,12 +55,12 @@ var ShowYourAcceptedPin = React.createClass({
 		    fontSize: 17
 		  }
 		};
-		var pins = this.state.yourPins.map(function (pin, index) {
+		var pins = this.state.yourRequestedPin.map(function (pin, index) {
 			return (
 				<li key={pin.id} className="list-group-item" style={styles.listGroup}>
 					<span style={styles.item}>
 					ID: {pin.id} | Created By: {pin.user_id} |
-					<button>Cancel Request</button>
+					<button onClick={this.handleCancelRequest.bind(this, pin.id)}>Cancel Request</button>
 					</span>
 				</li>
 			)

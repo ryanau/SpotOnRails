@@ -13,8 +13,13 @@ Rails.application.routes.draw do
 
     get '/logout', to: 'sessions#logout'
 
-    get '/check', to: 'sessions#check'
+    get '/session', to: 'sessions#show'
 
+    get '/accepted_pin', to: 'sessions#accepted_pin'
+
+    get '/dropped_pin', to: 'sessions#dropped_pin'
+
+    get '/dropped_pin_accepted', to: 'sessions#dropped_pin_accepted'
   end
 
   get '*path', to: 'app#show'

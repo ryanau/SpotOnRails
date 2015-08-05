@@ -1,0 +1,17 @@
+{
+  "name": "spoton",
+  "version": "0.0.0",
+  "homepage": "https://github.com/ryanau/SpotOnRails",
+  "authors": [
+    "ryanau <ryan.au@hotmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/assets/components",
+    "test",
+    "tests"
+  ]
+}

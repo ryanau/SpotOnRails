@@ -17,7 +17,7 @@ var ShowYourPin = React.createClass({
 
 	getYourPin: function () {
 		var url = "/pins";
-		var params = {query: 'your_active_pin', user_id: this.props.user};
+		var params = {query: 'your_dropped_pin'};
 		$.ajax ({
 			url: url,
 			type: 'GET',
@@ -27,15 +27,17 @@ var ShowYourPin = React.createClass({
 				console.log('error on getting your pins');
 			},
 			success: function (data) {
-				console.log('getting your active pin')
 				if (this.isMounted()) {
-					console.log(data)
 					this.setState({
 						yourPins: [data],
 					});
 				}
 			}.bind(this)
 		});
+	},
+
+	handleRemovePin: function (pin_id) {
+		App.pins.removePin(pin_id);
 	},
 
 	render: function () {
@@ -57,7 +59,8 @@ var ShowYourPin = React.createClass({
 			return (
 				<li key={pin.id} className="list-group-item" style={styles.listGroup}>
 					<span style={styles.item}>
-					ID: {pin.id} | Created by: You
+					ID: {pin.id} | Created by: You |
+					<button onClick={this.handleRemovePin.bind(this, pin.id)}>Remove Pin</button>
 					</span>
 				</li>
 			)

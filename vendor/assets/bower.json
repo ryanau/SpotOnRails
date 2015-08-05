@@ -1,0 +1,7 @@
+{
+  "name": "dsl-generated dependencies",
+  "dependencies": {
+    "eventemitter3": "latest",
+    "object.assign": "latest"
+  }
+}

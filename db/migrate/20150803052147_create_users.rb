@@ -7,8 +7,9 @@ class CreateUsers < ActiveRecord::Migration
 			t.string :password_hash
 			t.string :car_make
 			t.string :car_color
-			t.boolean :engage, default: false
-			t.boolean :accept, default: false
+			t.boolean :dropped_pin, default: false
+			t.boolean :accepted_pin, default: false
+			t.boolean :dropped_pin_accepted, default: false
 			t.float :latitude, default: nil
 			t.float :longitude, default: nil
 			t.integer :active_pin_id

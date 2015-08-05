@@ -1,24 +1,4 @@
 var Login = React.createClass({
-	registerUser: function (attributes) {
-		var url = "/login"
-		$.ajax({
-			url: url,
-			type: 'POST',
-			dataType: 'JSON',
-			data: attributes,
-			error: function () {
-				console.log('error on logging in user');
-			},
-			success: function (data) {
-				console.log('success in logging in user');
-				// sessionStorage.setItem('key', 'value');
-				// console.log(sessionStorage.getItem('key'));
-				this.props.id(data.id);
-				this.props.status("authorized");
-			}.bind(this),
-		});
-	},
-
 	handleSubmit: function(e) {
 	  e.preventDefault();
 	  var email = this.refs.email.getDOMNode().value;
@@ -28,8 +8,7 @@ var Login = React.createClass({
 	  	email: email,
 	  	password: password,
 	  }
-
-	  this.registerUser(attributes)
+	  App.auth.login(attributes);
 	},
 
 	render: function () {

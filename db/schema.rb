@@ -34,13 +34,14 @@ ActiveRecord::Schema.define(version: 20150803052147) do
     t.string   "password_hash"
     t.string   "car_make"
     t.string   "car_color"
-    t.boolean  "engage",        default: false
-    t.boolean  "accept",        default: false
+    t.boolean  "dropped_pin",          default: false
+    t.boolean  "accepted_pin",         default: false
+    t.boolean  "dropped_pin_accepted", default: false
     t.float    "latitude"
     t.float    "longitude"
     t.integer  "active_pin_id"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
   end
 
 end
