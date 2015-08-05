@@ -14,7 +14,9 @@ class UsersController < ApplicationController
 			session[:user_email] = user.email
 			session[:user_first_name] = user.first_name
 			session[:user_last_name] = user.last_name
-			render json: user
+			render json: user, status: 201
+		else
+			render nothing: true, status: 400
 		end
 	end
 end

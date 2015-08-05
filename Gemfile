@@ -16,9 +16,12 @@ gem 'bower-rails'
 
 
 group :development, :test do
-  gem 'pry-byebug'
-  gem 'pry-rails'
-  gem 'rspec'
-  gem 'web-console', '~> 2.0'
+	gem 'pry-rails'
+	gem 'pry-byebug'
+	gem 'rspec-rails'
+	gem 'factory_girl_rails'
+	gem 'capybara'
+	gem 'selenium-webdriver'
+	gem 'database_cleaner'
 end
 

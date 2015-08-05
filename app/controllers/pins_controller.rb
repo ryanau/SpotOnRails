@@ -17,9 +17,13 @@ class PinsController < ApplicationController
 
 	def create
 		user = User.find(params["id"])
-		pin = user.pins.create(active: true)
-		user.update_attributes(dropped_pin: true)
-		render json: pin
+		if user.pins[0]
+			render json: {message: 'You have already dropped a pin'}
+		else
+			pin = user.pins.create(active: true)
+			user.update_attributes(dropped_pin: true)
+			render json: pin
+		end
 	end
 
 	def update

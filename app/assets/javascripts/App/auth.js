@@ -21,12 +21,12 @@
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
 			},
-			error: function () {
-				console.log('error on registering user');
-			},
 			success: function (data) {
 				App.session.reload()
 			}.bind(this),
+			error: function () {
+				console.log('error on registering user');
+			},
 		});
 	};
 

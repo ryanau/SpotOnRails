@@ -7,36 +7,37 @@ class SessionsController < ApplicationController
 			session[:user_email] = user.email
 			session[:user_first_name] = user.first_name
 			session[:user_last_name] = user.last_name
-			render json: user
+			render json: user, status: 200
+
 		end
 	end
 
 	def logout
 		reset_session
 		message = 'logged out'
-		render json: {x:message}
+		render json: {x:message}, status: 200
 	end
 
 	def show
-		render json: session
+		render json: session, status: 200
 	end
 
 	def accepted_pin
 		status = User.find(session[:user_id]).accepted_pin
 		session[:user_accepted_pin] = status
-		render json: status
+		render json: status, status: 200
 	end
 
 	def dropped_pin
 		status = User.find(session[:user_id]).dropped_pin
 		session[:user_dropped_pin] = status
-		render json: status
+		render json: status, status: 200
 	end	
 
 	def dropped_pin_accepted
 		status = User.find(session[:user_id]).dropped_pin_accepted
 		session[:user_dropped_pin_accepted] = status
-		render json: status
+		render json: status, status: 200
 	end
 
 end
