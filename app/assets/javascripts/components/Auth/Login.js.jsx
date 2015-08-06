@@ -7,7 +7,7 @@ var Login = React.createClass({
 	  var attributes = {
 	  	email: email,
 	  	password: password,
-	  }
+	  };
 	  App.auth.login(attributes);
 	},
 
